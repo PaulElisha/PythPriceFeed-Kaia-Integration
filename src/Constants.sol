@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 abstract contract Constants {
     uint public VALID_TIME_PERIOD = block.timestamp + 2 days;
-    uint public constant SINGLE_UPDATE_FEE_IN_WEI = 1 ether;
+    uint public constant SINGLE_UPDATE_FEE_IN_WEI = 0.01 ether;
 
     uint256 public constant TESTNET_CONFIG = 1001;
     uint256 public constant MAINNET_CONFIG = 8217;

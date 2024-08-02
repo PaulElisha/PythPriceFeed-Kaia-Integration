@@ -3,10 +3,12 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
 import "../test/mocks/MockPyth.sol";
+import "@pythnetwork/PythStructs.sol";
 import "../script/NetworkConfig.s.sol";
 import "../src/Constants.sol";
 
 error CreatePriceUpdateData__InvalidPriceFeedId();
+error CreatePriceUpdateData__PriceFeedIDDoesNotExist();
 
 contract CreatePriceUpdateData is Constants, Script {
     struct PriceData {
@@ -35,6 +37,14 @@ contract CreatePriceUpdateData is Constants, Script {
     function createPriceData(
         bytes32 id
     ) public returns (bytes memory priceFeedUpdateData) {
+        MockPyth mockPyth = new MockPyth(
+            VALID_TIME_PERIOD,
+            SINGLE_UPDATE_FEE_IN_WEI
+        );
+
+        if (!mockPyth.priceFeedExists(id))
+            revert CreatePriceUpdateData__PriceFeedIDDoesNotExist();
+
         if (id == hex"") {
             revert CreatePriceUpdateData__InvalidPriceFeedId();
         }
@@ -42,11 +52,6 @@ contract CreatePriceUpdateData is Constants, Script {
         PriceData memory priceData = setPriceData();
 
         vm.startBroadcast();
-        MockPyth mockPyth = new MockPyth(
-            VALID_TIME_PERIOD,
-            SINGLE_UPDATE_FEE_IN_WEI
-        );
-
         priceFeedUpdateData = mockPyth.createPriceFeedUpdateData(
             id,
             priceData.price,

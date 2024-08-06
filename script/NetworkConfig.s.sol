@@ -75,6 +75,8 @@ contract NetworkConfig is Constants, Script {
             priceFeedId: 0xde5e6ef09931fecc7fdd8aaa97844e981f3e7bb1c86a6ffc68e9166bb0db3743
         });
 
+        console.log(address(mockPyth));
+
         return anvilConfig;
     }
 }

@@ -8,10 +8,12 @@ import "../script/NetworkConfig.s.sol";
 import "../src/Constants.sol";
 
 error CreatePriceUpdateData__InvalidPriceFeedId();
-error CreatePriceUpdateData__PriceFeedIDDoesNotExist();
+error CreatePriceUpdateData__PriceFeedIdDoesNotExist();
+error CreatePriceUpdateData__InvalidMockAddress();
 
 contract CreatePriceUpdateData is Constants, Script {
     struct PriceData {
+        bytes32 id;
         int64 price;
         uint64 conf;
         int32 expo;
@@ -29,31 +31,36 @@ contract CreatePriceUpdateData is Constants, Script {
         returns (bytes memory priceUpdateData)
     {
         NetworkConfig networkConfig = new NetworkConfig();
-        bytes32 Id = networkConfig.getConfig().priceFeedId;
+        bytes32 id = networkConfig.getConfig().priceFeedId;
+        address pythAddress = networkConfig.getConfig().pythFeedAddress;
 
-        priceUpdateData = createPriceData(Id);
+        priceUpdateData = createPriceData(id, pythAddress);
     }
 
     function createPriceData(
-        bytes32 id
+        bytes32 id,
+        address pythAddress
     ) public returns (bytes memory priceFeedUpdateData) {
-        MockPyth mockPyth = new MockPyth(
-            VALID_TIME_PERIOD,
-            SINGLE_UPDATE_FEE_IN_WEI
-        );
-
-        if (!mockPyth.priceFeedExists(id))
-            revert CreatePriceUpdateData__PriceFeedIDDoesNotExist();
-
         if (id == hex"") {
             revert CreatePriceUpdateData__InvalidPriceFeedId();
         }
 
-        PriceData memory priceData = setPriceData();
+        if (pythAddress == address(0)) {
+            revert CreatePriceUpdateData__InvalidMockAddress();
+        }
+
+        MockPyth mockPyth = MockPyth(pythAddress);
+        console.log(pythAddress);
+
+        if (!mockPyth.priceFeedExists(id)) {
+            revert CreatePriceUpdateData__PriceFeedIdDoesNotExist();
+        }
+
+        PriceData memory priceData = setPriceData(id);
 
         vm.startBroadcast();
         priceFeedUpdateData = mockPyth.createPriceFeedUpdateData(
-            id,
+            priceData.id,
             priceData.price,
             priceData.conf,
             priceData.expo,
@@ -61,15 +68,19 @@ contract CreatePriceUpdateData is Constants, Script {
             priceData.emaConf,
             priceData.publishTime
         );
+        vm.stopBroadcast();
 
         /** Test MockPyth works */
         uint validTime = mockPyth.getValidTimePeriod();
         console.log(validTime);
-        vm.stopBroadcast();
+
+        // PythStructs.PriceFeed memory priceFeed = mockPyth.queryPriceFeed(id);
+        // console.log(priceFeed);
     }
 
-    function setPriceData() public view returns (PriceData memory) {
+    function setPriceData(bytes32 id) public view returns (PriceData memory) {
         PriceData memory priceData = PriceData({
+            id: id,
             price: PRICE,
             conf: CONF,
             expo: EXPO,

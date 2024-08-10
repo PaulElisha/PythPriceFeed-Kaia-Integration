@@ -22,8 +22,8 @@ contract CreatePriceUpdateData is Constants, Script {
         uint64 publishTime;
     }
 
-    function run() public {
-        createPriceUpdateDataConfig();
+    function run() public returns (bytes memory) {
+        return createPriceUpdateDataConfig();
     }
 
     function createPriceUpdateDataConfig()

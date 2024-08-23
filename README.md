@@ -2,12 +2,12 @@
 
 ## Overview
 
-The `PriceConverterPyth` library is a Solidity library designed to convert token amounts on the base network to USD by leveraging the Pyth Network's price feeds. This utility allows developers to easily fetch real-time price data for KLAY/USD and convert token values into USD within their smart contracts.
+The `PriceConverterPyth` library is a Solidity library designed to convert token amounts on the base network to USD by leveraging the Pyth Network's price feeds. This utility allows developers to easily fetch real-time price data for ETH/USD and convert token values into USD within their smart contracts.
 
 ## Key Features
 
-- **Fetch KLAY/USD Price:** The library fetches the latest KLAY/USD exchange rate from the Pyth Network.
-- **Convert KLAY to USD:** Converts a given amount of KLAY into its equivalent USD value using the fetched exchange rate.
+- **Fetch ETH/USD Price:** The library fetches the latest ETH/USD exchange rate from the Pyth Network.
+- **Convert ETH to USD:** Converts a given amount of ETH into its equivalent USD value using the fetched exchange rate.
 - **Integration with Pyth Network:** The library is integrated with the Pyth Network, a trusted source for real-time, decentralized price feeds.
 
 ## Prerequisites
@@ -27,16 +27,16 @@ function getPrice(
 ) internal returns (uint256 price)
 ```
 
-- **Description:** Fetches the current KLAY/USD price from the Pyth Network's price feed.
+- **Description:** Fetches the current ETH/USD price from the Pyth Network's price feed.
 - **Parameters:**
-  - `priceFeedId`: The unique identifier of the price feed (e.g., KLAY/USD feed ID).
+  - `priceFeedId`: The unique identifier of the price feed (e.g., ETH/USD feed ID).
   - `pythFeed`: The address of the Pyth Network's price feed contract.
   - `priceUpdate`: An array of price update data that is used to update the on-chain price feed.
-- **Returns:** The current KLAY/USD exchange rate, scaled to 18 decimal places.
+- **Returns:** The current ETH/USD exchange rate, scaled to 18 decimal places.
 
 - **Process:**
   1. The function first submits a price update to the Pyth contract using the provided `priceUpdate` data, paying the necessary fee.
-  2. It then retrieves the latest KLAY/USD price using the `priceFeedId` and returns the price scaled to 18 decimal places.
+  2. It then retrieves the latest ETH/USD price using the `priceFeedId` and returns the price scaled to 18 decimal places.
 
 - **Important Notes:**
   - Ensure the price update is submitted before fetching the price. Failing to do so might result in outdated or incorrect data, leading to transaction failures.
@@ -45,24 +45,24 @@ function getPrice(
 
 ```solidity
 function getConversionRate(
-    uint256 klayAmount,
+    uint256 ETHAmount,
     bytes32 priceFeedId,
     IPyth pythFeed,
     bytes[] calldata priceUpdate
-) internal returns (uint256 klayAmountInUsd)
+) internal returns (uint256 ETHAmountInUsd)
 ```
 
-- **Description:** Converts a specified amount of KLAY into its USD equivalent using the latest price data from the Pyth Network.
+- **Description:** Converts a specified amount of ETH into its USD equivalent using the latest price data from the Pyth Network.
 - **Parameters:**
-  - `klayAmount`: The amount of KLAY to be converted to USD.
-  - `priceFeedId`: The unique identifier of the price feed (e.g., KLAY/USD feed ID).
+  - `EthAmount`: The amount of ETH to be converted to USD.
+  - `priceFeedId`: The unique identifier of the price feed (e.g., ETH/USD feed ID).
   - `pythFeed`: The address of the Pyth Network's price feed contract.
   - `priceUpdate`: An array of price update data used to update the on-chain price feed.
-- **Returns:** The equivalent USD value of the given KLAY amount.
+- **Returns:** The equivalent USD value of the given ETH amount.
 
 - **Process:**
-  1. The function first calls `getPrice()` to fetch the current KLAY/USD exchange rate.
-  2. It then calculates the USD equivalent of the provided KLAY amount by multiplying the exchange rate with `klayAmount` and dividing by 1e18 (to account for the scaling factor).
+  1. The function first calls `getPrice()` to fetch the current ETH/USD exchange rate.
+  2. It then calculates the USD equivalent of the provided ETH amount by multiplying the exchange rate with `ETHAmount` and dividing by 1e18 (to account for the scaling factor).
 
 ## Example Usage
 
@@ -80,15 +80,15 @@ contract MyContract {
         priceFeedId = _priceFeedId;
     }
     
-    function convertKlayToUsd(uint256 klayAmount, bytes[] calldata priceUpdate) external returns (uint256) {
-        return klayAmount.getConversionRate(priceFeedId, pythFeed, priceUpdate);
+    function convertETHToUsd(uint256 ETHAmount, bytes[] calldata priceUpdate) external returns (uint256) {
+        return ETHAmount.getConversionRate(priceFeedId, pythFeed, priceUpdate);
     }
 }
 ```
 
 ## Conclusion
 
-The `PriceConverterPyth` library provides a simple and effective way to interact with the Pyth Network's price feeds on the base blockchain. By using this library, developers can easily fetch real-time KLAY/USD prices and convert token amounts into USD, enabling more dynamic and responsive smart contract applications.
+The `PriceConverterPyth` library provides a simple and effective way to interact with the Pyth Network's price feeds on the base blockchain. By using this library, developers can easily fetch real-time ETH/USD prices and convert token amounts into USD, enabling more dynamic and responsive smart contract applications.
 
 
 

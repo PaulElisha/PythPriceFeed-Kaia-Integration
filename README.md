@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `PriceConverterPyth` library is a Solidity library designed to convert token amounts on the Klaytn network to USD by leveraging the Pyth Network's price feeds. This utility allows developers to easily fetch real-time price data for KLAY/USD and convert token values into USD within their smart contracts.
+The `PriceConverterPyth` library is a Solidity library designed to convert token amounts on the base network to USD by leveraging the Pyth Network's price feeds. This utility allows developers to easily fetch real-time price data for KLAY/USD and convert token values into USD within their smart contracts.
 
 ## Key Features
 
@@ -13,7 +13,7 @@ The `PriceConverterPyth` library is a Solidity library designed to convert token
 ## Prerequisites
 
 - Solidity version `^0.8.19`
-- The Pyth Network's price feed contracts available on the Klaytn network.
+- The Pyth Network's price feed contracts available on the base network.
 
 ## Library Functions
 
@@ -88,7 +88,7 @@ contract MyContract {
 
 ## Conclusion
 
-The `PriceConverterPyth` library provides a simple and effective way to interact with the Pyth Network's price feeds on the Klaytn blockchain. By using this library, developers can easily fetch real-time KLAY/USD prices and convert token amounts into USD, enabling more dynamic and responsive smart contract applications.
+The `PriceConverterPyth` library provides a simple and effective way to interact with the Pyth Network's price feeds on the base blockchain. By using this library, developers can easily fetch real-time KLAY/USD prices and convert token amounts into USD, enabling more dynamic and responsive smart contract applications.
 
 
 

@@ -5,8 +5,8 @@ abstract contract Constants {
     uint public VALID_TIME_PERIOD = block.timestamp + 2 days;
     uint public constant SINGLE_UPDATE_FEE_IN_WEI = 0.01 ether;
 
-    uint256 public constant TESTNET_CONFIG = 1001;
-    uint256 public constant MAINNET_CONFIG = 8217;
+    uint256 public constant TESTNET_CONFIG = 84532;
+    uint256 public constant MAINNET_CONFIG = 8453;
     uint256 public constant ANVIL_CONFIG = 31337;
 
     int64 public constant PRICE = 100;

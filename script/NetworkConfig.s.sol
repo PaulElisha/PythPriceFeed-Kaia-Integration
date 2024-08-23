@@ -45,7 +45,7 @@ contract NetworkConfig is Constants, Script {
     function getTestnetConfig() public pure returns (Config memory) {
         Config memory testnetConfig = Config({
             pythFeedAddress: 0x2880aB155794e7179c9eE2e38200202908C17B43,
-            priceFeedId: 0xde5e6ef09931fecc7fdd8aaa97844e981f3e7bb1c86a6ffc68e9166bb0db3743
+            priceFeedId: 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
         });
         return testnetConfig;
     }
@@ -53,7 +53,7 @@ contract NetworkConfig is Constants, Script {
     function getMainnetConfig() public pure returns (Config memory) {
         Config memory mainnetConfig = Config({
             pythFeedAddress: 0x2880aB155794e7179c9eE2e38200202908C17B43,
-            priceFeedId: 0xde5e6ef09931fecc7fdd8aaa97844e981f3e7bb1c86a6ffc68e9166bb0db3743
+            priceFeedId: 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
         });
         return mainnetConfig;
     }
@@ -72,7 +72,7 @@ contract NetworkConfig is Constants, Script {
 
         anvilConfig = Config({
             pythFeedAddress: address(mockPyth),
-            priceFeedId: 0xde5e6ef09931fecc7fdd8aaa97844e981f3e7bb1c86a6ffc68e9166bb0db3743
+            priceFeedId: 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
         });
 
         console.log(address(mockPyth));

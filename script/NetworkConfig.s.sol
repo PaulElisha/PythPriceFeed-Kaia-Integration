@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
 import "../test/mocks/MockPyth.sol";
+import "pyth-sdk-solidity/PythStructs.sol";
 import "../src/Constants.sol";
 
 error NetworkConfig__NoConfig();
@@ -12,6 +13,8 @@ contract NetworkConfig is Constants, Script {
         address pythFeedAddress;
         bytes32 priceFeedId;
     }
+
+    PythStructs.PriceFeed priceFeed;
 
     Config public anvilConfig;
 
@@ -63,16 +66,41 @@ contract NetworkConfig is Constants, Script {
             return anvilConfig;
         }
 
+        PythStructs.Price memory price = PythStructs.Price(
+            PRICE,
+            CONF,
+            EXPO,
+            PUBLISH_TIME
+        );
+
+        PythStructs.PriceFeed memory priceData = PythStructs.PriceFeed(
+            "0x01",
+            price,
+            price
+        );
+
         vm.startBroadcast();
         MockPyth mockPyth = new MockPyth(
             VALID_TIME_PERIOD,
             SINGLE_UPDATE_FEE_IN_WEI
         );
+
+        // bytes memory mockPriceData = mockPyth.createPriceFeedUpdateData(
+        //     "0x01",
+        //     PRICE,
+        //     CONF,
+        //     EXPO,
+        //     EMA_PRICE,
+        //     EMA_CONF,
+        //     PUBLISH_TIME
+        // );
+
+        mockPyth.setPriceFeed(priceData.id, priceData);
         vm.stopBroadcast();
 
         anvilConfig = Config({
             pythFeedAddress: address(mockPyth),
-            priceFeedId: 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
+            priceFeedId: priceData.id
         });
 
         console.log(address(mockPyth));

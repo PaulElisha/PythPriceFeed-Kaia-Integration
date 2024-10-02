@@ -7,7 +7,7 @@ import "@pythnetwork/PythErrors.sol";
 import "@pythnetwork/AbstractPyth.sol";
 
 contract MockPyth is AbstractPyth {
-    mapping(bytes32 => PythStructs.PriceFeed) priceFeeds;
+    mapping(bytes32 => PythStructs.PriceFeed) public priceFeeds;
     uint64 sequenceNumber;
 
     uint singleUpdateFeeInWei;
@@ -16,6 +16,13 @@ contract MockPyth is AbstractPyth {
     constructor(uint _validTimePeriod, uint _singleUpdateFeeInWei) {
         singleUpdateFeeInWei = _singleUpdateFeeInWei;
         validTimePeriod = _validTimePeriod;
+    }
+
+    function setPriceFeed(
+        bytes32 id,
+        PythStructs.PriceFeed memory priceData
+    ) public {
+        priceFeeds[id] = priceData;
     }
 
     function queryPriceFeed(

@@ -6,22 +6,13 @@ import "../test/mocks/MockPyth.sol";
 import "@pythnetwork/PythStructs.sol";
 import "../script/NetworkConfig.s.sol";
 import "../src/Constants.sol";
+import "./DeployFundMe.s.sol";
 
 error CreatePriceUpdateData__InvalidPriceFeedId();
 error CreatePriceUpdateData__PriceFeedIdDoesNotExist();
 error CreatePriceUpdateData__InvalidMockAddress();
 
 contract CreatePriceUpdateData is Constants, Script {
-    struct PriceData {
-        bytes32 id;
-        int64 price;
-        uint64 conf;
-        int32 expo;
-        int64 emaPrice;
-        uint64 emaConf;
-        uint64 publishTime;
-    }
-
     function run() public returns (bytes memory) {
         return createPriceUpdateDataConfig();
     }
@@ -56,19 +47,15 @@ contract CreatePriceUpdateData is Constants, Script {
             revert CreatePriceUpdateData__PriceFeedIdDoesNotExist();
         }
 
-        PriceData memory priceData = setPriceData(id);
-
-        vm.startBroadcast();
         priceFeedUpdateData = mockPyth.createPriceFeedUpdateData(
-            priceData.id,
-            priceData.price,
-            priceData.conf,
-            priceData.expo,
-            priceData.emaPrice,
-            priceData.emaConf,
-            priceData.publishTime
+            id,
+            PRICE,
+            CONF,
+            EXPO,
+            EMA_PRICE,
+            EMA_CONF,
+            PUBLISH_TIME
         );
-        vm.stopBroadcast();
 
         /** Test MockPyth works */
         uint validTime = mockPyth.getValidTimePeriod();
@@ -78,16 +65,21 @@ contract CreatePriceUpdateData is Constants, Script {
         // console.log(priceFeed);
     }
 
-    function setPriceData(bytes32 id) public view returns (PriceData memory) {
-        PriceData memory priceData = PriceData({
-            id: id,
-            price: PRICE,
-            conf: CONF,
-            expo: EXPO,
-            emaPrice: EMA_PRICE,
-            emaConf: EMA_CONF,
-            publishTime: PUBLISH_TIME
-        });
+    function setPriceData(
+        bytes32 id
+    ) public view returns (PythStructs.PriceFeed memory) {
+        PythStructs.Price memory price = PythStructs.Price(
+            PRICE,
+            CONF,
+            EXPO,
+            PUBLISH_TIME
+        );
+
+        PythStructs.PriceFeed memory priceData = PythStructs.PriceFeed(
+            id,
+            price,
+            price
+        );
 
         return priceData;
     }

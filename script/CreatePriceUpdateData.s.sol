@@ -12,7 +12,7 @@ error CreatePriceUpdateData__InvalidPriceFeedId();
 error CreatePriceUpdateData__PriceFeedIdDoesNotExist();
 error CreatePriceUpdateData__InvalidMockAddress();
 
-contract CreatePriceUpdateData is Constants, Script {
+contract CreatePriceUpdateData is Script, Constants {
     function run() public returns (bytes memory) {
         return createPriceUpdateDataConfig();
     }
@@ -25,13 +25,13 @@ contract CreatePriceUpdateData is Constants, Script {
         bytes32 id = networkConfig.getConfig().priceFeedId;
         address pythAddress = networkConfig.getConfig().pythFeedAddress;
 
-        priceUpdateData = createPriceData(id, pythAddress);
+        priceUpdateData = createPriceUpdataData(id, pythAddress);
     }
 
-    function createPriceData(
+    function createPriceUpdataData(
         bytes32 id,
         address pythAddress
-    ) public returns (bytes memory priceFeedUpdateData) {
+    ) public view returns (bytes memory priceFeedUpdateData) {
         if (id == hex"") {
             revert CreatePriceUpdateData__InvalidPriceFeedId();
         }

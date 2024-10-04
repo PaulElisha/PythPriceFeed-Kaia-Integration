@@ -19,13 +19,10 @@ contract DeployFundMe is Script {
         bytes32 pythPriceFeedId = config.priceFeedId;
 
         bytes[] memory updateData = new bytes[](1);
-        updateData[
-            0
-        ] = "0x3078303100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000001f4fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000640000000000000000000000000000000000000000000000000000000000000190fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80000000000000000000000000000000000000000000000000000000000000001";
+        updateData[0] = createPriceUpdateData.createPriceUpdateDataConfig();
 
         vm.startBroadcast();
         FundMe fundMe = new FundMe(pythFeedAddress, pythPriceFeedId);
-        fundMe.fund(updateData);
         vm.stopBroadcast();
 
         return (fundMe, networkConfig, createPriceUpdateData);

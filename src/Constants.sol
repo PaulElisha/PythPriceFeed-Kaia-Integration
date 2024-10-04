@@ -9,10 +9,10 @@ abstract contract Constants {
     uint256 public constant MAINNET_CONFIG = 8453;
     uint256 public constant ANVIL_CONFIG = 31337;
 
-    int64 public constant PRICE = 100;
-    uint64 public constant CONF = 500;
+    int64 public constant PRICE = 10;
+    uint64 public constant CONF = 40;
     int32 public constant EXPO = -8;
-    int64 public constant EMA_PRICE = 100;
-    uint64 public constant EMA_CONF = 400;
+    int64 public constant EMA_PRICE = 20;
+    uint64 public constant EMA_CONF = 50;
     uint64 public PUBLISH_TIME = uint64(block.timestamp);
 }

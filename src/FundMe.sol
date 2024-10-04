@@ -4,6 +4,7 @@ pragma solidity ^0.8.22;
 import "./PriceConverterPyth.sol";
 import "@pythnetwork/IPyth.sol";
 import "@pythnetwork/PythStructs.sol";
+import "forge-std/console2.sol";
 
 error FundMe__NotOwner();
 
@@ -12,7 +13,7 @@ contract FundMe {
 
     address private immutable i_owner;
     bytes32 public immutable i_feedId;
-    uint256 public constant MINIMUM_USD = 2 * 1e18;
+    uint256 public constant MINIMUM_USD = 1e18;
     address[] private Funders;
     mapping(address => uint256) private addressToAmountFunded;
     IPyth public pyth;
@@ -31,11 +32,14 @@ contract FundMe {
     }
 
     function fund(bytes[] calldata priceUpdate) public payable {
-        require(
-            msg.value.getConversionRate(i_feedId, pyth, priceUpdate) >=
-                MINIMUM_USD,
-            "Didn't send enough ETH"
+        uint256 conversionRate = msg.value.getConversionRate(
+            i_feedId,
+            pyth,
+            priceUpdate
         );
+        console2.log("Conversion Rate: ", conversionRate);
+        require(conversionRate >= MINIMUM_USD, "Didn't send enough ETH");
+
         Funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     }

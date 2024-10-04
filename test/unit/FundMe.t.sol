@@ -9,24 +9,22 @@ import "../../script/CreatePriceUpdateData.s.sol";
 contract FundMeTest is Test {
     FundMe fundMe;
     CreatePriceUpdateData createPriceUpdateData;
-    bytes priceUpdateData;
     bytes[] updateData;
     address USER = makeAddr("user");
-    uint256 constant SEND_VALUE = 0.1 ether;
-    uint256 constant STARTING_BALANCE = 100 ether;
+    uint256 constant SEND_VALUE = 200000000 ether;
+    uint256 constant STARTING_BALANCE = 300000000 ether;
     uint256 constant GAS_PRICE = 1;
 
     function setUp() public {
         DeployFundMe deployFundMe = new DeployFundMe();
         (fundMe, , createPriceUpdateData) = deployFundMe.deployFundMe();
-        priceUpdateData = createPriceUpdateData.createPriceUpdateDataConfig();
         updateData = new bytes[](1);
-        updateData[0] = priceUpdateData;
+        updateData[0] = createPriceUpdateData.createPriceUpdateDataConfig();
         vm.deal(USER, STARTING_BALANCE);
     }
 
     function testMinimumUsd() public view {
-        assertEq(fundMe.MINIMUM_USD(), 2e18);
+        assertEq(fundMe.MINIMUM_USD(), 1e18);
     }
 
     function testOwner() public view {
